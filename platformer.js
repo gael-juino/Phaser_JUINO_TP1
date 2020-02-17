@@ -29,6 +29,8 @@ var slime;
 var vie;
 var nVie = 3;
 
+var pieces;
+
 
 function preload(){
     this.load.image('Zone1','assets/Zone1.png'); 
@@ -40,6 +42,7 @@ function preload(){
     this.load.image('vie2','assets/vie2.png'); 
     this.load.image('vie1','assets/vie1.png'); 
 
+    this.load.image('piece','assets/piece.png');
 }
 
 function create(){
@@ -61,25 +64,17 @@ function create(){
     platforms.setAlpha(0);
 
 
+    /*Joueur*/
+    player = this.physics.add.sprite(10,450,'gabe');
+    player.setCollideWorldBounds(true);
+    player.setBounce(0.2);
+    this.physics.add.collider(player,platforms);
+
     vie0 = this.add.image(0,0, 'vie0').setOrigin(0,0);
     vie1 = this.add.image(0,0, 'vie1').setOrigin(0,0);
     vie2 = this.add.image(0,0, 'vie2').setOrigin(0,0);
     vie3 = this.add.image(0,0, 'vie3').setOrigin(0,0);
 
-    player = this.physics.add.sprite(10,450,'gabe');
-    player.setCollideWorldBounds(true);
-    player.setBounce(0.2);
-    this.physics.add.collider(player,platforms);
-    
-
-    slime = this.physics.add.sprite(135,300,'green-slime');
-    slime.setCollideWorldBounds(true);
-    slime.setBounce(0.2);
-    this.physics.add.collider(slime,platforms);
-    this.physics.add.overlap(slime, player, hitPlayer, null, this);
-    
-    cursors = this.input.keyboard.createCursorKeys(); 
-    
     this.anims.create({
         key:'left',
         frames: this.anims.generateFrameNumbers('gabe', {start: 0, end: 3}),
@@ -93,26 +88,43 @@ function create(){
         frameRate: 20
     });
     
+    /*Collectible*/
+        //Pièces
+    pieces = this.physics.add.group();
+    pieces.create(135,240,'piece').setScale(1,1);
+    this.physics.add.overlap(pieces, player, collect, null, this);
+
+    /*Ennemi*/
+    slime = this.physics.add.sprite(135,300,'green-slime');
+    slime.setCollideWorldBounds(true);
+    slime.setBounce(0.2);
+    this.physics.add.collider(slime,platforms);
+    this.physics.add.overlap(slime, player, hitPlayer, null, this);
+    
+    cursors = this.input.keyboard.createCursorKeys(); 
+    
+    
+    
 }
 
 
 
 function update(){
-    if(cursors.left.isDown){
-        player.anims.play('left', true);
+    if(cursors.left.isDown) {
+        //player.anims.play('left', true);
         player.setVelocityX(-300);
         player.setFlipX(true);
     }else if(cursors.right.isDown){
         player.setVelocityX(300);
-        player.anims.play('left', true);
+        //player.anims.play('left', true);
         player.setFlipX(false);
     }else if(cursors.up.isDown){
         player.setVelocityY(-300);
-        player.anims.play('left', true);
+        //player.anims.play('left', true);
         player.setFlipX(false);  
     }else if(cursors.down.isDown){
         player.setVelocityY(300);
-        player.anims.play('left', true);
+        //player.anims.play('left', true);
         player.setFlipX(false);   
     
     }else{
@@ -162,4 +174,8 @@ function collectStar(player, star){
 
 function hitPlayer(slime, player) {
     nVie--;
+}
+function collect(piece, player) {
+    console.log("touche");
+    pieces.destroy(true);
 }
