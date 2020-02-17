@@ -29,6 +29,8 @@ var slime;
 var vie;
 var nVie = 3;
 
+var scoreText;
+var scorePiece = 0;
 var pieces;
 
 
@@ -47,6 +49,7 @@ function preload(){
 
 function create(){
     this.add.image(400,300,'Zone1');
+    this.add.image(710,20,'piece');
 
     platforms = this.physics.add.staticGroup();
     platforms.create(85,506,'mur').setScale(6,2).refreshBody();
@@ -93,6 +96,7 @@ function create(){
     pieces = this.physics.add.group();
     pieces.create(135,240,'piece').setScale(1,1);
     this.physics.add.overlap(pieces, player, collect, null, this);
+    scoreText =this.add.text(650,15, scorePiece);
 
     /*Ennemi*/
     slime = this.physics.add.sprite(135,300,'green-slime');
@@ -176,6 +180,7 @@ function hitPlayer(slime, player) {
     nVie--;
 }
 function collect(piece, player) {
-    console.log("touche");
     pieces.destroy(true);
+    scorePiece += 10;
+    scoreText.setText(scorePiece);
 }
