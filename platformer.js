@@ -34,10 +34,13 @@ function preload(){
     this.load.image('Zone1','assets/Zone1.png'); 
     this.load.spritesheet('gabe','assets/gabe.png',{frameWidth: 23, frameHeight: 23});
     this.load.spritesheet('green-slime','assets/slime-green.png',{frameWidth: 16, frameHeight: 24});
+    
+    this.load.image('vie0','assets/vie0.png');
+    this.load.image('vie3','assets/vie3.png'); 
+    this.load.image('vie2','assets/vie2.png'); 
+    this.load.image('vie1','assets/vie1.png'); 
 
 }
-
-
 
 function create(){
     this.add.image(400,300,'Zone1');
@@ -57,6 +60,11 @@ function create(){
     platforms.create(720,399,'mur').setScale(5,1).refreshBody();
     platforms.setAlpha(0);
 
+
+    vie0 = this.add.image(0,0, 'vie0').setOrigin(0,0);
+    vie1 = this.add.image(0,0, 'vie1').setOrigin(0,0);
+    vie2 = this.add.image(0,0, 'vie2').setOrigin(0,0);
+    vie3 = this.add.image(0,0, 'vie3').setOrigin(0,0);
 
     player = this.physics.add.sprite(10,450,'gabe');
     player.setCollideWorldBounds(true);
@@ -117,6 +125,17 @@ function update(){
         player.setVelocityY(-330);
     } 
 
+    if (nVie==2) {
+        vie3.destroy(true);
+
+    }
+    if (nVie==1) {
+        vie2.destroy(true);
+    }
+    if (nVie==0) {
+        vie1.destroy(true);
+    }
+
    
 }
 
@@ -142,5 +161,5 @@ function collectStar(player, star){
 
 
 function hitPlayer(slime, player) {
-    console.log("Touché");
+    nVie--;
 }
